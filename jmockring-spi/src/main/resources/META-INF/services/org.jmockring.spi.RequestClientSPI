@@ -1,0 +1,2 @@
+org.jmockring.spi.provider.RestEasyClientProvider
+org.jmockring.spi.provider.RestAssuredClientProvider

@@ -1,0 +1,320 @@
+<!--
+  ~ Copyright (c) 2013, Pavel Lechev
+  ~    All rights reserved.
+  ~
+  ~    Redistribution and use in source and binary forms, with or without modification,
+  ~    are permitted provided that the following conditions are met:
+  ~
+  ~     1) Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+  ~     2) Redistributions in binary form must reproduce the above copyright notice,
+  ~        this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+  ~     3) Neither the name of the Pavel Lechev nor the names of its contributors may be used to endorse or promote
+  ~        products derived from this software without specific prior written permission.
+  ~
+  ~    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+  ~    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  ~    IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  ~    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  ~    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ~    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jmockring</groupId>
+        <artifactId>jmockring</artifactId>
+        <version>0.5.9-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jmockring-core</artifactId>
+    <packaging>jar</packaging>
+
+    <name>jmockring core</name>
+    <description>
+        jmockring - Java test MOCKing tool for spRING.
+
+        A test harness tool for projects using the following technology stack:
+        - Java 6+
+        - Spring 3.1 or greater as a DI/Deployment container
+        - JUnit 4 and Mockito for testing
+        - Jetty/Servlet API 3.0 for web app (war) deployment - for testing only
+
+        Main features:
+        1) Partial Spring context deployment with automatic bean mocking for unavailable beans
+        2) Bootstrapping embedded Jetty server via JUnit runners
+        3) Configurable web application contexts
+        4) Automatic injection of Spring beans and mocks in JUnit tests via Java5 annotations
+
+    </description>
+    <url>https://github.com/plechev/jmockring</url>
+    <developers>
+        <developer>
+            <name>Pavel Lechev</name>
+            <email>p.lechev@gmail.com</email>
+            <organizationUrl>https://github.com/plechev/jmockring</organizationUrl>
+            <timezone>GMT</timezone>
+        </developer>
+    </developers>
+
+    <dependencies>
+
+        <!-- JETTY DEPENDENCIES -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javax.servlet</artifactId>
+                    <groupId>org.eclipse.jetty.orbit</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <!-- JSP and JSTL SUPPORT -->
+        <!--<dependency>-->
+            <!-- do not enable jasper dependency -->
+            <!--<groupId>org.eclipse.jetty</groupId>-->
+            <!--<artifactId>jetty-jsp</artifactId>-->
+            <!--<version>${jetty.jsp.version}</version>-->
+        <!--</dependency>-->
+
+
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!--<dependency>-->
+        <!--<groupId>org.eclipse.jetty</groupId>-->
+        <!--<artifactId>jetty-server</artifactId>-->
+        <!--<version>${jetty.version}</version>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<artifactId>javax.servlet</artifactId>-->
+        <!--<groupId>org.eclipse.jetty.orbit</groupId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.eclipse.jetty</groupId>-->
+        <!--<artifactId>jetty-webapp</artifactId>-->
+        <!--<version>${jetty.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.eclipse.jetty</groupId>-->
+        <!--<artifactId>jetty-servlet</artifactId>-->
+        <!--<version>${jetty.version}</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; JSP Support &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.glassfish.web</groupId>-->
+        <!--<artifactId>javax.servlet.jsp</artifactId>-->
+        <!--<version>${glassfish.javax.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.glassfish.web</groupId>-->
+        <!--<artifactId>jsp-impl</artifactId>-->
+        <!--<version>${glassfish.javax-impl.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.mortbay.jetty</groupId>-->
+        <!--<artifactId>jsp-2.1</artifactId>-->
+        <!--<version>6.1.14</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.mortbay.jetty</groupId>-->
+        <!--<artifactId>jsp-api-2.1</artifactId>-->
+        <!--<version>6.1.14</version>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<artifactId>servlet-api-2.5</artifactId>-->
+        <!--<groupId>org.mortbay.jetty</groupId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; EL Support &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.glassfish.web</groupId>-->
+        <!--<artifactId>javax.el</artifactId>-->
+        <!--<version>${glassfish.javax.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.glassfish.web</groupId>-->
+        <!--<artifactId>el-impl</artifactId>-->
+        <!--<version>${glassfish.javax-impl.version}</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; JSTL Support &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>javax.servlet</groupId>-->
+        <!--<artifactId>jstl</artifactId>-->
+        <!--<version>${glassfish.jstl.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.glassfish.web</groupId>-->
+        <!--<artifactId>jstl-impl</artifactId>-->
+        <!--<version>${glassfish.jstl.version}</version>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<artifactId>servlet-api</artifactId>-->
+        <!--<groupId>javax.servlet</groupId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
+        <!--</dependency>-->
+
+        <!-- TOMCAT SUPPORT -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${commons.collections.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1.0-PFD-1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>${hibernate-jpa.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+
+
+        <!-- TESTING STUFF -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

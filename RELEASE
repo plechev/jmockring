@@ -1,0 +1,13 @@
+
+v0.4.4
+ - expose ServerConfiguration via RestAssuredClient
+
+v0.4.3
+ - default parser for RestAssured, expose RestAssuredConfig via client
+
+v0.4.2
+ - Made "contextPath" attribute optional for @ExecutionConfiguration to aid usage of @ContextDefaults
+
+v0.4.1
+ - First official release to Maven Central
+

@@ -1,0 +1,28 @@
+/* AUTOMATICALLY GENERATED ON Sun Jan 27 05:47:33 GMT 2013*/
+/* DO NOT EDIT */
+
+grant {
+  permission java.util.PropertyPermission "*", "read";
+  permission java.util.PropertyPermission "*", "read, write";
+  permission java.lang.RuntimePermission "accessDeclaredMembers";
+  permission java.io.FilePermission "<<ALL FILES>>", "read";
+  permission java.lang.RuntimePermission "getenv.*";
+  permission java.io.FilePermission "${user.install.root}\\-", "read, write, delete";
+  permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+  permission java.lang.RuntimePermission "getClassLoader";
+  permission java.lang.RuntimePermission "createClassLoader";
+  permission java.lang.RuntimePermission "getProtectionDomain";
+  permission java.lang.RuntimePermission "modifyThread";
+  permission java.io.FilePermission "${java.io.tmpdir}\\*", "read, write, delete, execute";
+  permission java.lang.RuntimePermission "modifyThreadGroup";
+  permission java.net.SocketPermission "*", "connect";
+  permission java.lang.RuntimePermission "loadLibrary.*";
+  permission java.lang.RuntimePermission "queuePrintJob";
+  permission java.net.SocketPermission "*", "connect";
+};
+
+
+grant codeBase "file:/${java.home}/-" {
+  permission java.security.AllPermission;
+};
+

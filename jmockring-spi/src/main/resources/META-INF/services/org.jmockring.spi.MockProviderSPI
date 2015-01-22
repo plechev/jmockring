@@ -1,0 +1,2 @@
+org.jmockring.spi.provider.mockring.PowerMockitoMockingProvider
+org.jmockring.spi.provider.mockring.MockitoMockingProvider
