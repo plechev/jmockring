@@ -20,8 +20,7 @@
   ~    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -32,7 +31,7 @@
 
     <groupId>org.jmockring</groupId>
     <artifactId>jmockring</artifactId>
-    <version>0.5.9-SNAPSHOT</version>
+    <version>0.5.9</version>
     <packaging>pom</packaging>
     <name>jmockring all modules</name>
 
@@ -182,7 +181,7 @@
         <url>https://github.com/plechev/jmockring</url>
         <connection>scm:git:git://github.com/plechev/jmockring.git</connection>
         <developerConnection>scm:git:git@github.com:plechev/jmockring.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>jmockring-0.5.9</tag>
     </scm>
 
     <repositories>
