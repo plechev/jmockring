@@ -24,7 +24,7 @@
     <parent>
         <artifactId>jmockring</artifactId>
         <groupId>org.jmockring</groupId>
-        <version>0.5.10-SNAPSHOT</version>
+        <version>0.5.10</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -37,19 +37,19 @@
         <dependency>
             <groupId>org.jmockring</groupId>
             <artifactId>jmockring-core</artifactId>
-            <version>0.5.10-SNAPSHOT</version>
+            <version>0.5.10</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jmockring</groupId>
             <artifactId>jmockring-spi</artifactId>
-            <version>0.5.10-SNAPSHOT</version>
+            <version>0.5.10</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jmockring</groupId>
             <artifactId>jmockring-ri</artifactId>
-            <version>0.5.10-SNAPSHOT</version>
+            <version>0.5.10</version>
             <scope>provided</scope>
         </dependency>
 
