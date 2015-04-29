@@ -26,7 +26,7 @@
     <parent>
         <groupId>org.jmockring</groupId>
         <artifactId>jmockring</artifactId>
-        <version>0.6.2</version>
+        <version>0.6.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>jmockring-spi</artifactId>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.jmockring</groupId>
             <artifactId>jmockring-core</artifactId>
-            <version>0.6.2</version>
+            <version>0.6.3-SNAPSHOT</version>
         </dependency>
 
         <!-- client providers -->
