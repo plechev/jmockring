@@ -62,6 +62,7 @@
 
         <hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
         <jaxrs.version>1.1.1</jaxrs.version>
+        <commons-beanutils.version>1.9.2</commons-beanutils.version>
     </properties>
 
     <modules>
@@ -69,6 +70,7 @@
         <module>jmockring-spi</module>
         <module>jmockring-tests</module>
         <module>jmockring-ri</module>
+        <module>jmockring-utils</module>
     </modules>
 
     <build>
@@ -250,6 +252,11 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
             </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -285,6 +292,13 @@
                 <version>${hamcrest-version}</version>
                 <scope>compile</scope>
             </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
