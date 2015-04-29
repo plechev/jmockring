@@ -31,7 +31,7 @@
 
     <groupId>org.jmockring</groupId>
     <artifactId>jmockring</artifactId>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.6.1</version>
     <packaging>pom</packaging>
     <name>jmockring all modules</name>
 
@@ -183,7 +183,7 @@
         <url>https://github.com/plechev/jmockring</url>
         <connection>scm:git:git://github.com/plechev/jmockring.git</connection>
         <developerConnection>scm:git:git@github.com:plechev/jmockring.git</developerConnection>
-        <tag>jmockring-0.5.9</tag>
+        <tag>jmockring-0.6.1</tag>
     </scm>
 
     <repositories>
