@@ -24,7 +24,7 @@
     <parent>
         <artifactId>jmockring</artifactId>
         <groupId>org.jmockring</groupId>
-        <version>0.5.11-SNAPSHOT</version>
+        <version>0.6.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -37,27 +37,25 @@
         <dependency>
             <groupId>org.jmockring</groupId>
             <artifactId>jmockring-core</artifactId>
-            <version>0.5.11-SNAPSHOT</version>
+            <version>0.6.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jmockring</groupId>
             <artifactId>jmockring-spi</artifactId>
-            <version>0.5.11-SNAPSHOT</version>
+            <version>0.6.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jmockring</groupId>
             <artifactId>jmockring-ri</artifactId>
-            <version>0.5.11-SNAPSHOT</version>
+            <version>0.6.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>

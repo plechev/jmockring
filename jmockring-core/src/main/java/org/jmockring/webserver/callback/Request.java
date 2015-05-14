@@ -61,7 +61,7 @@ public final class Request {
     }
 
     public static enum Method {
-        GET, POST, PUT, HEAD, DELETE;
+        GET, POST, PUT, HEAD, DELETE, OPTION;
     }
 
     @Override
