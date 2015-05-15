@@ -25,7 +25,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 07/01/13
  */
 public class CustomApplicationContextInitializer implements ApplicationContextInitializer {

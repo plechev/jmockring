@@ -25,14 +25,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.hamcrest.CoreMatchers;
-import org.jmockring.annotation.Server;
-import org.jmockring.annotation.WebContext;
-import org.jmockring.configuration.BaseContextConfiguration;
-import org.jmockring.configuration.ConfigurationConstants;
-import org.jmockring.configuration.ServerConfiguration;
-import org.jmockring.configuration.WebAppContextConfiguration;
-import org.jmockring.utils.ClassMatcher;
-import org.jmockring.webserver.jetty.JettyWebServer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,8 +34,17 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 
+import org.jmockring.annotation.Server;
+import org.jmockring.annotation.WebContext;
+import org.jmockring.configuration.BaseContextConfiguration;
+import org.jmockring.configuration.ConfigurationConstants;
+import org.jmockring.configuration.ServerConfiguration;
+import org.jmockring.configuration.WebAppContextConfiguration;
+import org.jmockring.utils.ClassMatcher;
+import org.jmockring.webserver.jetty.JettyWebServer;
+
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 02/01/13
  */
 @RunWith(MockitoJUnitRunner.class)

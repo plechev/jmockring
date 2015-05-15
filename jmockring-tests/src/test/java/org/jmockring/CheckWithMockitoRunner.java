@@ -31,8 +31,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 /**
  * Just demonstrates that we can use multiple tests inside a suite
  * which all use different JUnit runners
- * <p/>
- * see also {@link CheckWithSpringRunner}
  *
  * @author Pavel Lechev
  * @date 19/07/12

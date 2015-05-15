@@ -30,7 +30,7 @@ import org.jmockring.configuration.ServerConfiguration;
  * <p/>
  * All implementing classes must have a public constructor accepting a single argument of type {@link org.jmockring.configuration.ServerConfiguration}
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 25/01/13
  */
 public interface WebServer {

@@ -24,12 +24,13 @@ package org.jmockring.spi.provider.mockring;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import org.jmockring.spi.ExecutionHandler;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.junit.runner.Runner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.jmockring.spi.ExecutionHandler;
 
 /**
  * Powermock provider - uses Mockito to create mocks and adds extra functionality around static method mocking, etc ...
@@ -55,7 +56,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  * ^^ It is a JUnit requirement for the rule fields to be made <code>public</code>. ^^
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 28/02/13
  */

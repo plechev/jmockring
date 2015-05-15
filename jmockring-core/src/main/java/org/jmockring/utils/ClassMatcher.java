@@ -25,7 +25,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 02/01/13
  */
 public class ClassMatcher extends BaseMatcher<Class> {

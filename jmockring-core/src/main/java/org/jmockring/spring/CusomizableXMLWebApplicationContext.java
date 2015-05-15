@@ -24,13 +24,6 @@ package org.jmockring.spring;
 import java.io.IOException;
 import java.util.Map;
 
-import org.jmockring.configuration.BaseContextConfiguration;
-import org.jmockring.configuration.ConfigurationConstants;
-import org.jmockring.configuration.ServerConfiguration;
-import org.jmockring.configuration.ServerConfigurationAware;
-import org.jmockring.configuration.ServerExecutionRegistry;
-import org.jmockring.spring.event.SpringEventSnooper;
-import org.jmockring.spring.mock.BeanAutoMockPostProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -43,8 +36,16 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import org.jmockring.configuration.BaseContextConfiguration;
+import org.jmockring.configuration.ConfigurationConstants;
+import org.jmockring.configuration.ServerConfiguration;
+import org.jmockring.configuration.ServerConfigurationAware;
+import org.jmockring.configuration.ServerExecutionRegistry;
+import org.jmockring.spring.event.SpringEventSnooper;
+import org.jmockring.spring.mock.BeanAutoMockPostProcessor;
+
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 03/01/13
  */
 public class CusomizableXMLWebApplicationContext extends XmlWebApplicationContext implements ServerConfigurationAware {

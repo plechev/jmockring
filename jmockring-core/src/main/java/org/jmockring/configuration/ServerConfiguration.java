@@ -100,14 +100,20 @@ public class ServerConfiguration {
      * locate it in the available properties for the specified key.
      *
      * @param portPropertyKey
-     *
      * @return
      * @throws IllegalArgumentException if we don't have explicit configuration and the key is not passed
      *                                  or it doesn't point to a valid port
+     * @should return explicitly configured port
+     * @should throw exception if not explicitly configured port and portPropertyKey is null
+     * @should return port from properties if available
+     * @should return default port if port not available in properties
      */
     public int getPort(String portPropertyKey) {
         if (this.port > 0) {
             return port;
+        }
+        if (portPropertyKey == null) {
+            throw new IllegalArgumentException("No explicit port configuration and null port property key");
         }
         try {
             this.port = Integer.parseInt(getProperties().getProperty(portPropertyKey));
@@ -117,7 +123,7 @@ public class ServerConfiguration {
                 return defaultPort;
             }
             throw new IllegalArgumentException(
-                    String.format("Can't determine externally configured port for property [%s]", portPropertyKey), e);
+                String.format("Can't determine externally configured port for property [%s]", portPropertyKey), e);
         }
     }
 
@@ -148,6 +154,7 @@ public class ServerConfiguration {
 
     /**
      * @return
+     * @should return cached properties
      */
     public Properties getProperties() {
         if (cachedProperties == null) {
@@ -158,6 +165,7 @@ public class ServerConfiguration {
 
     /**
      * Read all properties from the configured file and the system location.
+     * @should preload properties from
      */
     public void refresh() {
         final String configFile = System.getProperty(ConfigurationConstants.EXTERNAL_CONFIG_SYSTEM_KEY);
@@ -181,9 +189,9 @@ public class ServerConfiguration {
     @Override
     public String toString() {
         return String.format("%s -> [%s://%s:%d]",
-                getClass().getSimpleName(),
-                getScheme(),
-                getHost(),
-                getPort());
+            getClass().getSimpleName(),
+            getScheme(),
+            getHost(),
+            getPort());
     }
 }

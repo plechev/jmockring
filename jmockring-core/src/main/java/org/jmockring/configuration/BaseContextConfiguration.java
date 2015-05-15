@@ -25,7 +25,7 @@ import org.jmockring.annotation.Server;
 import org.jmockring.webserver.callback.CallbackRequestEventListener;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 02/01/13
  */
 public abstract class BaseContextConfiguration<A> {

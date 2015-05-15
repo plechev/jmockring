@@ -3,7 +3,7 @@ package org.jmockring.configuration;
 import org.springframework.context.ApplicationContext;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @since 15/07/13
  */
 public interface ServerConfigurationAware {

@@ -19,14 +19,15 @@ package org.jmockring.provider;/*
  *    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.springframework.web.servlet.DispatcherServlet;
+
 import org.jmockring.annotation.DynamicContext;
 import org.jmockring.annotation.Server;
 import org.jmockring.annotation.Servers;
 import org.jmockring.annotation.Servlet;
 import org.jmockring.junit.ExternalServerJUnitSuiteRunner;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 /**
  * Reference implementation of the {@link org.jmockring.junit.ExternalServerJUnitSuiteRunner} usage to write configuration suites.
@@ -48,17 +49,17 @@ import org.junit.runners.Suite;
 @RunWith(ExternalServerJUnitSuiteRunner.class)
 // [Not ready] @Security("security/example.policy")
 @Servers(value = {
-        @Server(
-                dynamicContexts = @DynamicContext(
-                        springContextLocations = "classpath:/spring/application-context.xml",
-                        contextPath = "/context1",
-                        servlets = {@Servlet(servletClass = HttpServletDispatcher.class)}
-                ),
-                testClass = SuiteIT.class
-        )
+    @Server(
+        dynamicContexts = @DynamicContext(
+            springContextLocations = "classpath:/spring/application-context.xml",
+            contextPath = "/context1",
+            servlets = {@Servlet(servletClass = DispatcherServlet.class)}
+        ),
+        testClass = SuiteIT.class
+    )
 })
 @Suite.SuiteClasses({
-        CheckServiceProviders.class
+    CheckServiceProviders.class
 })
 public class SuiteIT {
 

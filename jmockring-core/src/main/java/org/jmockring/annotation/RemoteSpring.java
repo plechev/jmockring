@@ -27,8 +27,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jmockring.webserver.WebServer;
 import org.springframework.context.ApplicationContext;
+
+import org.jmockring.webserver.WebServer;
 
 /**
  * Inject the Spring context directly into the test class.
@@ -36,7 +37,7 @@ import org.springframework.context.ApplicationContext;
  * The type of the target field can be anything that extends {@link org.springframework.context.ApplicationContext},
  * however it must be compatible with the actual context class retrieved from the remote execution.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 02/01/13
  * @see org.jmockring.junit.PoshTestPostProcessor
  */
@@ -68,7 +69,7 @@ public @interface RemoteSpring {
      * <p/>
      * Ohhh ... Java ...
      */
-    static interface ContextSupertype {
+    interface ContextSupertype {
 
         /**
          * The target fields annotated with this annotation must be assignable to this type.

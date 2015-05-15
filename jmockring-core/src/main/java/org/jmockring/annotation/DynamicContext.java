@@ -30,7 +30,7 @@ import java.util.EventListener;
 import javax.servlet.http.HttpServlet;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 31/12/12
  */

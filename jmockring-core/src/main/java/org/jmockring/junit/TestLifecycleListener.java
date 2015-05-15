@@ -22,7 +22,7 @@
 package org.jmockring.junit;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 15/01/13
  */
 public interface TestLifecycleListener {

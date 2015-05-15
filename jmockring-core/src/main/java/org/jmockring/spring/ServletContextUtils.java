@@ -7,7 +7,7 @@ import org.jmockring.configuration.ConfigurationConstants;
 import org.jmockring.configuration.ServerConfiguration;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @since 15/07/13
  */
 public class ServletContextUtils {

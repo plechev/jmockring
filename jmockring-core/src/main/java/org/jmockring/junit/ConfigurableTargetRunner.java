@@ -21,12 +21,13 @@
 
 package org.jmockring.junit;
 
-import org.jmockring.spring.event.SpringEventSnooper;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.TestClass;
 
+import org.jmockring.spring.event.SpringEventSnooper;
+
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 04/01/13
  */
 public interface ConfigurableTargetRunner<T> {
