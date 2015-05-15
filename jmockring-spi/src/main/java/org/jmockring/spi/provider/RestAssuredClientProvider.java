@@ -27,7 +27,7 @@ import org.jmockring.spi.RequestClientSPI;
 import org.jmockring.spi.client.RestAssuredClient;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 16/02/13
  */

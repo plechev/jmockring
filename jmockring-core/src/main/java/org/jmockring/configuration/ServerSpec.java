@@ -29,7 +29,7 @@ import org.jmockring.webserver.WebServer;
  * <p/>
  * This is used as a pointer to locate specific server configuration / context in the {@link ServerExecutionRegistry}
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 03/01/13
  */
 public class ServerSpec {

@@ -1,7 +1,7 @@
 package org.jmockring.utils;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 21/04/13
  */
 public class Functions {

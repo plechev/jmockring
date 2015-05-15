@@ -27,7 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 import javax.servlet.http.HttpServlet;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 02/01/13
  */
 @Documented

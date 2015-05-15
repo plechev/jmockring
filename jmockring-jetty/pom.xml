@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jmockring</artifactId>
+        <groupId>org.jmockring</groupId>
+        <version>0.6.3-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>jmockring-jetty</artifactId>
+
+    <properties>
+        <jetty.version>8.1.5.v20120716</jetty.version>
+        <jetty.jsp.version>8.1.4.v20120524</jetty.jsp.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.jmockring</groupId>
+            <artifactId>jmockring-core</artifactId>
+            <version>0.6.3-SNAPSHOT</version>
+        </dependency>
+
+        <!-- JETTY DEPENDENCIES -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javax.servlet</artifactId>
+                    <groupId>org.eclipse.jetty.orbit</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+
+    </dependencies>
+
+
+</project>

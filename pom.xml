@@ -20,7 +20,8 @@
   ~    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -32,37 +33,30 @@
     <groupId>org.jmockring</groupId>
     <artifactId>jmockring</artifactId>
     <version>0.6.3-SNAPSHOT</version>
+
     <packaging>pom</packaging>
     <name>jmockring all modules</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jetty.version>8.1.5.v20120716</jetty.version>
-        <jetty.jsp.version>8.1.4.v20120524</jetty.jsp.version>
-        <glassfish.javax.version>2.2.5</glassfish.javax.version>
-        <glassfish.javax-impl.version>2.2</glassfish.javax-impl.version>
-        <glassfish.jstl.version>1.2</glassfish.jstl.version>
-        <tomcat.version>7.0.42</tomcat.version>
 
-        <resteasy.version>2.3.5.Final</resteasy.version>
-        <mockito.version>1.9.0</mockito.version>
+        <guava.version>11.0.2</guava.version>
         <commons.io.version>1.4</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>
         <commons.lang.version>2.5</commons.lang.version>
         <commons.collections.version>3.2.1</commons.collections.version>
         <slf4j.version>1.6.1</slf4j.version>
         <spring.version>3.2.4.RELEASE</spring.version>
-        <httpclient.version>4.1.2</httpclient.version>
-        <commons.logging.version>1.1.1</commons.logging.version>
-        <commons.httpclient.version>3.1</commons.httpclient.version>
-        <selenium.support.version>2.1.0</selenium.support.version>
         <servlet-api.version>3.0.1</servlet-api.version>
-        <hamcrest-version>1.2.1</hamcrest-version>
-        <junit-dep.version>4.10</junit-dep.version>
-
         <hibernate-jpa.version>1.0.1.Final</hibernate-jpa.version>
         <jaxrs.version>1.1.1</jaxrs.version>
         <commons-beanutils.version>1.9.2</commons-beanutils.version>
+
+        <hamcrest-version>1.3</hamcrest-version>
+        <junit.version>4.11</junit.version>
+        <mockito.version>1.9.0</mockito.version>
+        <powermock.version>1.6.2</powermock.version>
+
     </properties>
 
     <modules>
@@ -70,6 +64,8 @@
         <module>jmockring-spi</module>
         <module>jmockring-tests</module>
         <module>jmockring-ri</module>
+        <module>jmockring-jetty</module>
+        <module>jmockring-tomcat</module>
         <module>jmockring-utils</module>
     </modules>
 
@@ -80,7 +76,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
                 <configuration>
-                    <skipTests>true</skipTests>
+                    <skipTests>false</skipTests>
                 </configuration>
                 <executions>
                     <execution>
@@ -99,8 +95,8 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.12.4</version>
                 <configuration>
-                    <skipTests>true</skipTests>
-                    <skipITs>true</skipITs>
+                    <skipTests>false</skipTests>
+                    <skipITs>false</skipITs>
                 </configuration>
                 <executions>
                     <execution>
@@ -152,6 +148,7 @@
 
 
     <profiles>
+        <!-- Releasing to Central -->
         <profile>
             <id>sonatype-oss-release</id>
             <build>
@@ -183,64 +180,22 @@
         <url>https://github.com/plechev/jmockring</url>
         <connection>scm:git:git://github.com/plechev/jmockring.git</connection>
         <developerConnection>scm:git:git@github.com:plechev/jmockring.git</developerConnection>
-        <tag>jmockring-0.5.9</tag>
+        <tag>jmockring</tag>
     </scm>
-
-    <repositories>
-        <repository>
-            <id>jboss</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-server</artifactId>
-                <version>${jetty.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>javax.servlet</artifactId>
-                        <groupId>org.eclipse.jetty.orbit</groupId>
-                    </exclusion>
-                </exclusions>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+                <scope>compile</scope>
             </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-webapp</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jaxrs</artifactId>
-                <version>${resteasy.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-spring</artifactId>
-                <version>${resteasy.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jackson-provider</artifactId>
-                <version>${resteasy.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>commons-collections</groupId>
@@ -261,7 +216,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>11.0.2</version>
+                <version>${guava.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.inject</groupId>
@@ -272,38 +227,6 @@
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.0-api</artifactId>
                 <version>${hibernate-jpa.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit-dep</artifactId>
-                <scope>compile</scope>
-                <version>${junit-dep.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hamcrest</groupId>
-                        <artifactId>hamcrest-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-core</artifactId>
-                <version>${hamcrest-version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${servlet-api.version}</version>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -378,7 +301,54 @@
                 <version>${spring.version}</version>
                 <scope>compile</scope>
             </dependency>
+
+
+            <!-- TESTING  -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit-dep</artifactId>
+                <version>${junit.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-core</artifactId>
+                <version>${hamcrest-version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-junit</artifactId>
+                <version>2.0.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

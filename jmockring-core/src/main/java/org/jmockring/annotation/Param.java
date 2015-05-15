@@ -30,7 +30,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p/>
  * Used for servlet parameters, etc ...
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 31/01/13
  */
 @Documented

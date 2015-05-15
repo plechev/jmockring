@@ -36,7 +36,7 @@ import org.jmockring.webserver.WebServer;
  * <p/>
  * Also, internally manages the state of the mocks before each configuration method execution - mocks are reset/cleared from theier recorded behaviour.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 02/01/13
  * @see org.jmockring.junit.PoshTestPostProcessor
  */

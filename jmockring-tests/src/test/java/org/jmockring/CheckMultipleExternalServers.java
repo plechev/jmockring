@@ -21,7 +21,12 @@
 
 package org.jmockring;
 
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.context.ApplicationContext;
 
 import org.jmockring.annotation.ContextDefaults;
 import org.jmockring.annotation.ExecutionConfiguration;
@@ -36,12 +41,6 @@ import org.jmockring.ri.repository.TestRepository;
 import org.jmockring.ri.service.TestService;
 import org.jmockring.spi.client.RestAssuredClient;
 import org.jmockring.webserver.jetty.JettyWebServer;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.client.RestTemplate;
-
-import com.jayway.restassured.response.Response;
 
 /**
  * This demonstrates the usage of multiple external services running
@@ -51,7 +50,7 @@ import com.jayway.restassured.response.Response;
  * @date 19/07/12
  */
 @RunWith(ExternalServerJUnitRunner.class)
-@PartOfSuite(ExternalServerSuiteIT.class)
+@PartOfSuite(JettyServerSuiteIT.class)
 @ContextDefaults(bootstrap = JettyWebServer.class, contextPath = "/context1")
 public class CheckMultipleExternalServers {
 
@@ -85,10 +84,44 @@ public class CheckMultipleExternalServers {
 
     @Test
     public void shouldAccessMultipleExternalServers() throws Exception {
-        RestTemplate restTemplate = new RestTemplate();
+
         when(testRepository.getString()).thenReturn("BLAH ...");
-        Response response = client1.newRequest().get("/default/111");
-        String body = response.getBody().asString();
+
+        client1
+            .newRequest()
+            .request().log().all(true)
+            .response().log().all(true)
+            .expect()
+            .statusCode(200)
+            .content("key1_111", is("value1"))
+            .content("key2_111", is("value2"))
+            .content("key3_111", is("value3"))
+            .when()
+            .get("/default/111");
+
+
+        client2
+            .newRequest()
+            .request().log().all(true)
+            .response().log().all(true)
+            .expect()
+            .statusCode(200)
+            .content("key_Default", is("value_Default"))
+            .when()
+            .get("/default");
+
+        client3
+            .newRequest()
+            .request().log().all(true)
+            .response().log().all(true)
+            .expect()
+            .statusCode(200)
+            .content("key1_333", is("value1"))
+            .content("key2_333", is("value2"))
+            .content("key3_333", is("value3"))
+            .when()
+            .get("/default/333");
+
     }
 
 }

@@ -28,7 +28,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.jmockring.webserver.WebServer;
-import org.jmockring.webserver.jetty.JettyWebServer;
 
 /**
  * Configure a single server execution.
@@ -83,7 +82,7 @@ public @interface Server {
      *
      * @see DynamicContext#springContextLocations()
      */
-    Class<? extends WebServer> bootstrap() default JettyWebServer.class;
+    Class<? extends WebServer> bootstrap() default WebServer.class;
 
     /**
      * Dynamic port allocation:

@@ -32,7 +32,7 @@ import org.jmockring.webserver.WebServer;
 /**
  * Injects {@link org.jmockring.configuration.ServerExecutionConfiguration}
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 04/01/13
  * @see org.jmockring.junit.PoshTestPostProcessor
  */

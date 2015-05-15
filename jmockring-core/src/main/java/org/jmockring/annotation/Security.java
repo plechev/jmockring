@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  * <p/>
  * If specified, the {@link SecurityManager} will be enabled with this security policy file in effect.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 27/01/13
  */
 @Target(ElementType.TYPE)

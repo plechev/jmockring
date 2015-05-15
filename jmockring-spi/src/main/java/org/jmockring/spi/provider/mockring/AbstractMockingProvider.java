@@ -24,13 +24,14 @@ package org.jmockring.spi.provider.mockring;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.jmockring.spi.ExecutionHandler;
-import org.jmockring.spi.MockProviderSPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.jmockring.spi.ExecutionHandler;
+import org.jmockring.spi.MockProviderSPI;
+
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 28/02/13
  */

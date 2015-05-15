@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 27/01/13
  */
 public class GrantedPermissions {

@@ -21,14 +21,15 @@
 
 package org.jmockring.spring;
 
-import org.jmockring.configuration.BaseContextConfiguration;
 import org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader;
 import org.w3c.dom.Element;
+
+import org.jmockring.configuration.BaseContextConfiguration;
 
 /**
  * Skip XML files from being used for building the bean factory.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 07/01/13
  */
 public class ImportFilteringBeanDefinitionDocumentReader extends DefaultBeanDefinitionDocumentReader {

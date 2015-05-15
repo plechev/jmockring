@@ -33,7 +33,7 @@ import org.jmockring.webserver.WebServer;
  * Injects instance of {@link org.jmockring.webserver.callback.CallbackRequestEventListener}
  * which can be uses to suspend the current thread and wait for request notification.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 31/01/13
  */
 @Target(ElementType.FIELD)

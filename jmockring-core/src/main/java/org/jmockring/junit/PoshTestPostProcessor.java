@@ -30,6 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.support.AbstractApplicationContext;
+
 import org.jmockring.annotation.ContextDefaults;
 import org.jmockring.annotation.ExecutionConfiguration;
 import org.jmockring.annotation.RemoteBean;
@@ -47,18 +54,12 @@ import org.jmockring.spring.event.SpringEventSnooper;
 import org.jmockring.spring.mock.BeanAutoMockPostProcessor;
 import org.jmockring.webserver.WebServer;
 import org.jmockring.webserver.callback.CallbackRequestEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.support.AbstractApplicationContext;
 
 /**
  * Post-process test classes to inject annotated fields with various remote context data.
  * <p/>
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 04/01/13
  * @see org.jmockring.annotation.RemoteBean
  * @see org.jmockring.annotation.RemoteMock

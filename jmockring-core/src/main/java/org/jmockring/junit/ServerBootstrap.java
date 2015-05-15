@@ -33,6 +33,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.junit.runners.model.TestClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jmockring.annotation.BootstrapConfig;
 import org.jmockring.annotation.DynamicContext;
 import org.jmockring.annotation.Param;
@@ -49,9 +53,6 @@ import org.jmockring.spi.PostShutdownHook;
 import org.jmockring.spi.PreStartupHook;
 import org.jmockring.utils.PortChecker;
 import org.jmockring.webserver.WebServer;
-import org.junit.runners.model.TestClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Bootstrap services based on information in Server annotations placed on either a test class or test suite.
@@ -77,14 +78,6 @@ public class ServerBootstrap {
 
     private static final Logger log = LoggerFactory.getLogger(ServerBootstrap.class);
 
-    private ExecutorService executorService;
-
-    private final List<WebServer> servers;
-
-    private CountDownLatch startUpLatch;
-
-    private CountDownLatch shutDownLatch;
-
     /**
      * To prevent an infinite block, for whatever reason, this is the absolute maximum of time (in seconds per-server)
      * for which the configuration executor thread will wait before giving up and proceeding to executing the tests.
@@ -97,167 +90,88 @@ public class ServerBootstrap {
      */
     private static final long ABSOLUTE_MAX_WAIT_FOR_SHUTDOWN = 2;
 
+    private final List<WebServer> servers;
+
     private final ConfigurableTargetRunner<?> runner;
+
+    private ExecutorService executorService;
+
+    private CountDownLatch shutDownLatch;
+
+    private CountDownLatch startUpLatch;
 
     ServerBootstrap(ConfigurableTargetRunner<?> runner) {
         this.servers = new ArrayList<WebServer>();
         this.runner = runner;
     }
 
-    ServersRunstateListener runAll() {
-        // startup hook
-        Class<? extends PreStartupHook> startupHookClass = getBootstrapConfig().startupHook();
-        if (startupHookClass != PreStartupHook.class) {
-            log.info("LOG00400: Calling shutdown cleanup: {}", startupHookClass);
-            try {
-                startupHookClass.newInstance().beforeTestsCommence();
-            } catch (Exception e) {
-                log.error("LOG00410: Failed to execute startup hook!", e);
-                throw new IllegalStateException(e);
+    /**
+     * While this provides a level of certainty, it is still not 100% failure-proof.
+     * Albeit highly unlikely, an allocated port may become unavailable
+     * in the short interval between this call and the startup of the server.
+     * If this becomes an issue, try playing with port ranges via {@link org.jmockring.annotation.Server#startAtPort()},
+     *
+     * @param serverContext
+     * @return
+     */
+    private int allocateAvailablePort(Server serverContext) {
+        for (int portToCheck = serverContext.startAtPort(); portToCheck <= PortChecker.MAX_PORT_NUMBER; ++portToCheck) {
+            if (PortChecker.available(portToCheck)) {
+                return portToCheck;
             }
         }
-
-
-        String securityPolicy = getSecurityPolicy();
-        if (securityPolicy != null) {
-            log.info("Proceed to enabling Java2 security manager with policy '{}'", securityPolicy);
-            SecurityUtils.enableSecurity(securityPolicy);
-        }
-
-        ServersRunstateListener listener = new ServersRunstateListener();
-        log.debug("Added <ServersRunstateListener> listener");
-        try {
-            startServers();
-        } catch (NoSuchMethodException e) {
-            log.error("LOG00120:", e);
-            throw new IllegalStateException("Can't bootstrap external server", e);
-        } catch (InterruptedException e) {
-            log.error("LOG00120:", e);
-            throw new IllegalStateException("Can't bootstrap external server", e);
-        }
-        log.debug("Removing <ServersRunstateListener> listener");
-        return listener;
+        throw new IllegalStateException(String.format("Can not allocate port. Attempted range [%s, %s]",
+                serverContext.startAtPort(),
+                PortChecker.MAX_PORT_NUMBER)
+        );
     }
 
     /**
-     * @throws NoSuchMethodException
-     * @throws java.lang.reflect.InvocationTargetException
+     * Verify that the server is up and running so we can un-latch the waiting (tests executor) thread.
      *
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @param portNumber
+     * @param tryAttempts
+     * @throws InterruptedException
      */
-    private void startServers() throws NoSuchMethodException, InterruptedException {
-        Server[] servers = getServerAnnotations();
-        BootstrapConfig bootstrapConfig = getBootstrapConfig();
-        setSystemProperties(bootstrapConfig.systemProperties());
-        initialiseExecutorService(servers.length);
+    private void checkServerRunning(int portNumber, int tryAttempts) throws InterruptedException {
 
-        // start the servers:
-        log.info("Initiating servers startup (>>)");
-        for (Server context : servers) {
-            startSingleServer(context, bootstrapConfig);
-        }
-        // wait for all servers to start
-        this.startUpLatch.await(ABSOLUTE_MAX_WAIT_FOR_STARTUP * servers.length, TimeUnit.SECONDS);
-        log.info("All servers are up and running: proceed to tests (>>)");
+        int pauseFor = 1000; // a sec is good enough
+        int attempts = 0;
 
-    }
-
-    /**
-     * @param params
-     */
-    private void setSystemProperties(Param[] params) {
-        for (Param param : params) {
-            System.setProperty(param.name(), param.value());
-        }
-    }
-
-    private BootstrapConfig getBootstrapConfig() {
-        TestClass testClass = runner.getConfiguredTestClass();
-        Annotation[] annotations = testClass.getAnnotations();
-        BootstrapConfig bootstrapConfig = null;
-        for (Annotation a : annotations) {
-            if (a.annotationType() == BootstrapConfig.class) {
-                bootstrapConfig = (BootstrapConfig) a;
-                log.info("Using configured bootstrapConfig = {}", bootstrapConfig);
-                break;
+        while (true) {
+            boolean isRunning = !PortChecker.available(portNumber);
+            attempts++;
+            if (isRunning) {
+                startUpLatch.countDown();
+                log.info(String.format("Good-to-go for server on port %s after %s attempts. Total startup wait %s sec",
+                                portNumber,
+                                attempts,
+                                (pauseFor * attempts) / 1000)
+                );
+                return;
             }
-        }
-        if (bootstrapConfig == null) {
-            bootstrapConfig = BootstrapConfig.DEFAULT.getConfig();
-            log.info("Using default bootstrapConfig = {}", bootstrapConfig);
-        }
-        return bootstrapConfig;
-    }
-
-    /**
-     * Configure the thread pool executor.
-     *
-     * @param serversNum
-     */
-    private void initialiseExecutorService(int serversNum) {
-        int threadPoolSize = (int) (Runtime.getRuntime().availableProcessors() * 0.5 * (serversNum + 1 / 2));
-        if (threadPoolSize == 0) {
-            // on some OS `availableProcessors` is 0
-            threadPoolSize = 2;
-        }
-        log.info("Configuring Executor service with pool size {} for {} servers. ", threadPoolSize, serversNum);
-        this.executorService = Executors.newFixedThreadPool(threadPoolSize, new ThreadFactory() {
-            ThreadFactory wrappedFactory = Executors.defaultThreadFactory();
-
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = wrappedFactory.newThread(r);
-                t.setName("SRVExec:" + t.getName());
-                t.setUncaughtExceptionHandler(new BootstrapUncaughtExceptionHandler());
-                return t;
+            if (attempts > tryAttempts) {
+                startUpLatch.countDown(); // un-latch before exception
+                shutDownLatch.countDown();
+                executorService.shutdown(); // kill all executing threads
+                throw new IllegalStateException(
+                        String.format(
+                                "Can't connect to server on port %s after %s attempts. " +
+                                        "When debugging make sure no breakpoints exist anywhere in the bootstrap call stack. " +
+                                        "If this problem persists, use @BootstrapConfig to increase the number of allowed attempts before giving up to connect.",
+                                portNumber,
+                                attempts));
             }
-        });
-        this.startUpLatch = new CountDownLatch(serversNum);
-        this.shutDownLatch = new CountDownLatch(serversNum);
-    }
-
-    /**
-     * @param serverConfig
-     *
-     * @throws NoSuchMethodException
-     * @throws java.lang.reflect.InvocationTargetException
-     *
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     */
-    private void startSingleServer(final Server serverConfig, final BootstrapConfig bootstrapConfig) throws InterruptedException {
-        final ServerConfiguration serverConfiguration = createConfiguration(serverConfig, bootstrapConfig);
-        try {
-            final WebServer server = serverConfig.bootstrap().newInstance();
-            server.initialise(serverConfiguration);
-            this.executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    log.info("Starting the server {} on port {}", server.getName(), server.getPort());
-                    server.start(); // block here ....
-                    shutDownLatch.countDown();
-                    log.info("Prepare to shut down the server '{}' on port {}", server.getName(), server.getPort());
-                }
-            });
-            this.servers.add(server);
-            checkServerRunning(server.getPort(), bootstrapConfig.numberOfAttempts());
-            server.waitForInitialisation();
-
-        } catch (InstantiationException e) {
-            throw new IllegalArgumentException(e);
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException(e);
+            Thread.sleep(pauseFor);
         }
-    }
 
+    }
 
     /**
      * Create server configuration from the annotations data.
      *
      * @param serverConfig
      * @param bootstrapConfig
-     *
      * @return
      */
     private ServerConfiguration createConfiguration(Server serverConfig, BootstrapConfig bootstrapConfig) {
@@ -294,27 +208,22 @@ public class ServerBootstrap {
         return configuration;
     }
 
-
-    /**
-     * While this provides a level of certainty, it is still not 100% failure-proof.
-     * Albeit highly unlikely. an allocated port may become unavailable
-     * in the short interval between this call and the startup of the server.
-     * If this becomes an issue, try playing with port ranges via {@link org.jmockring.annotation.Server#startAtPort()},
-     *
-     * @param serverContext
-     *
-     * @return
-     */
-    private int allocateAvailablePort(Server serverContext) {
-        for (int portToCheck = serverContext.startAtPort(); portToCheck <= PortChecker.MAX_PORT_NUMBER; ++portToCheck) {
-            if (PortChecker.available(portToCheck)) {
-                return portToCheck;
+    private BootstrapConfig getBootstrapConfig() {
+        TestClass testClass = runner.getConfiguredTestClass();
+        Annotation[] annotations = testClass.getAnnotations();
+        BootstrapConfig bootstrapConfig = null;
+        for (Annotation a : annotations) {
+            if (a.annotationType() == BootstrapConfig.class) {
+                bootstrapConfig = (BootstrapConfig) a;
+                log.info("Using configured bootstrapConfig = {}", bootstrapConfig);
+                break;
             }
         }
-        throw new IllegalStateException(String.format("Can not allocate port. Attempted range [%s, %s]",
-                serverContext.startAtPort(),
-                PortChecker.MAX_PORT_NUMBER)
-        );
+        if (bootstrapConfig == null) {
+            bootstrapConfig = BootstrapConfig.DEFAULT.getConfig();
+            log.info("Using default bootstrapConfig = {}", bootstrapConfig);
+        }
+        return bootstrapConfig;
     }
 
     /**
@@ -328,7 +237,6 @@ public class ServerBootstrap {
         }
         return null;
     }
-
 
     /**
      * @return
@@ -363,8 +271,98 @@ public class ServerBootstrap {
     }
 
     /**
-     * @param allServers
+     * Configure the thread pool executor.
      *
+     * @param serversNum
+     */
+    private void initialiseExecutorService(int serversNum) {
+        int threadPoolSize = (int) (Runtime.getRuntime().availableProcessors() * 0.5 * (serversNum + 1 / 2));
+        if (threadPoolSize == 0) {
+            // on some OS `availableProcessors` is 0
+            threadPoolSize = 2;
+        }
+        log.info("Configuring Executor service with pool size {} for {} servers. ", threadPoolSize, serversNum);
+        this.executorService = Executors.newFixedThreadPool(threadPoolSize, new ThreadFactory() {
+            ThreadFactory wrappedFactory = Executors.defaultThreadFactory();
+
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = wrappedFactory.newThread(r);
+                t.setName("SRVExec:" + t.getName());
+                t.setUncaughtExceptionHandler(new BootstrapUncaughtExceptionHandler());
+                return t;
+            }
+        });
+        this.startUpLatch = new CountDownLatch(serversNum);
+        this.shutDownLatch = new CountDownLatch(serversNum);
+    }
+
+    /**
+     * @param params
+     */
+    private void setSystemProperties(Param[] params) {
+        for (Param param : params) {
+            System.setProperty(param.name(), param.value());
+        }
+    }
+
+    /**
+     * @throws NoSuchMethodException
+     * @throws java.lang.reflect.InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    private void startServers() throws NoSuchMethodException, InterruptedException {
+        Server[] servers = getServerAnnotations();
+        BootstrapConfig bootstrapConfig = getBootstrapConfig();
+        setSystemProperties(bootstrapConfig.systemProperties());
+        initialiseExecutorService(servers.length);
+
+        // start the servers:
+        log.info("Initiating servers startup (>>)");
+        for (Server context : servers) {
+            startSingleServer(context, bootstrapConfig);
+        }
+        // wait for all servers to start
+        this.startUpLatch.await(ABSOLUTE_MAX_WAIT_FOR_STARTUP * servers.length, TimeUnit.SECONDS);
+        log.info("All servers are up and running: proceed to tests (>>)");
+
+    }
+
+    /**
+     * @param serverConfig
+     * @throws NoSuchMethodException
+     * @throws java.lang.reflect.InvocationTargetException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    private void startSingleServer(final Server serverConfig, final BootstrapConfig bootstrapConfig) throws InterruptedException {
+        final ServerConfiguration serverConfiguration = createConfiguration(serverConfig, bootstrapConfig);
+        try {
+            final WebServer server = serverConfig.bootstrap().newInstance();
+            server.initialise(serverConfiguration);
+            this.executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    log.info("Starting the server {} on port {}", server.getName(), server.getPort());
+                    server.start(); // block here ....
+                    shutDownLatch.countDown();
+                    log.info("Prepare to shut down the server '{}' on port {}", server.getName(), server.getPort());
+                }
+            });
+            this.servers.add(server);
+            checkServerRunning(server.getPort(), bootstrapConfig.numberOfAttempts());
+            server.waitForInitialisation();
+
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException(e);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * @param allServers
      * @throws IllegalArgumentException if any of the context configurations are inconsistent
      */
     private void validateContextsConfiguration(Server[] allServers) {
@@ -392,46 +390,14 @@ public class ServerBootstrap {
         }
     }
 
-    /**
-     * Verify that the server is up and running so we can un-latch the waiting (tests executor) thread.
-     *
-     * @param portNumber
-     * @param tryAttempts
-     *
-     * @throws InterruptedException
-     */
-    private void checkServerRunning(int portNumber, int tryAttempts) throws InterruptedException {
+    static class BootstrapUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
-        int pauseFor = 1000; // a sec is good enough
-        int attempts = 0;
+        private static Logger logB = LoggerFactory.getLogger(BootstrapUncaughtExceptionHandler.class);
 
-        while (true) {
-            boolean isRunning = !PortChecker.available(portNumber);
-            attempts++;
-            if (isRunning) {
-                startUpLatch.countDown();
-                log.info(String.format("Good-to-go for server on port %s after %s attempts. Total startup wait %s sec",
-                        portNumber,
-                        attempts,
-                        (pauseFor * attempts) / 1000)
-                        );
-                return;
-            }
-            if (attempts > tryAttempts) {
-                startUpLatch.countDown(); // un-latch before exception
-                shutDownLatch.countDown();
-                executorService.shutdown(); // kill all executing threads
-                throw new IllegalStateException(
-                        String.format(
-                                "Can't connect to server on port %s after %s attempts. " +
-                                        "When debugging make sure no breakpoints exist anywhere in the bootstrap call stack. " +
-                                        "If this problem persists, use @BootstrapConfig to increase the number of allowed attempts before giving up to connect.",
-                                portNumber,
-                                attempts));
-            }
-            Thread.sleep(pauseFor);
+        @Override
+        public void uncaughtException(Thread t, Throwable e) {
+            logB.error("Thread died with exception", e);
         }
-
     }
 
     /**
@@ -505,14 +471,38 @@ public class ServerBootstrap {
         }
     }
 
-    static class BootstrapUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-
-        private static Logger logB = LoggerFactory.getLogger(BootstrapUncaughtExceptionHandler.class);
-
-        @Override
-        public void uncaughtException(Thread t, Throwable e) {
-            logB.error("Thread died with exception", e);
+    ServersRunstateListener runAll() {
+        // startup hook
+        Class<? extends PreStartupHook> startupHookClass = getBootstrapConfig().startupHook();
+        if (startupHookClass != PreStartupHook.class) {
+            log.info("LOG00400: Calling shutdown cleanup: {}", startupHookClass);
+            try {
+                startupHookClass.newInstance().beforeTestsCommence();
+            } catch (Exception e) {
+                log.error("LOG00410: Failed to execute startup hook!", e);
+                throw new IllegalStateException(e);
+            }
         }
+
+        String securityPolicy = getSecurityPolicy();
+        if (securityPolicy != null) {
+            log.info("Proceed to enabling Java2 security manager with policy '{}'", securityPolicy);
+            SecurityUtils.enableSecurity(securityPolicy);
+        }
+
+        ServersRunstateListener listener = new ServersRunstateListener();
+        log.debug("Added <ServersRunstateListener> listener");
+        try {
+            startServers();
+        } catch (NoSuchMethodException e) {
+            log.error("LOG00120:", e);
+            throw new IllegalStateException("Can't bootstrap external server", e);
+        } catch (InterruptedException e) {
+            log.error("LOG00120:", e);
+            throw new IllegalStateException("Can't bootstrap external server", e);
+        }
+        log.debug("Removing <ServersRunstateListener> listener");
+        return listener;
     }
 
 

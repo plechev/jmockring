@@ -1,5 +1,12 @@
 package org.jmockring.test.mvcsupport;
 
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.web.servlet.DispatcherServlet;
+
+import com.jayway.restassured.response.Response;
+
 import org.jmockring.annotation.DynamicContext;
 import org.jmockring.annotation.Param;
 import org.jmockring.annotation.RequestClient;
@@ -8,15 +15,9 @@ import org.jmockring.annotation.Servlet;
 import org.jmockring.junit.ExternalServerJUnitRunner;
 import org.jmockring.ri.servlet.DefaultServlet;
 import org.jmockring.spi.client.RestAssuredClient;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.web.servlet.DispatcherServlet;
-
-import com.jayway.restassured.response.Response;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 03/04/13
  */
 

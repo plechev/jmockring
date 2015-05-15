@@ -24,11 +24,11 @@ package org.jmockring.spring.event;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 05/02/13
  */
 public interface SnooperDelegate<E extends ApplicationEvent> {
 
-    public void snoop(E event);
+    void snoop(E event);
 
 }

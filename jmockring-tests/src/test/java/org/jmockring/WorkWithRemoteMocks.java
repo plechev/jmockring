@@ -21,53 +21,45 @@
 
 package org.jmockring;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
-import java.util.Map;
-import javax.ws.rs.core.MediaType;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
-import org.jboss.resteasy.client.ClientExecutor;
-import org.jboss.resteasy.client.ClientResponse;
-import org.jmockring.annotation.ExecutionConfiguration;
+import org.jmockring.annotation.ContextDefaults;
 import org.jmockring.annotation.PartOfSuite;
 import org.jmockring.annotation.RemoteMock;
 import org.jmockring.annotation.RequestClient;
-import org.jmockring.configuration.ServerExecutionConfiguration;
 import org.jmockring.junit.ExternalServerJUnitRunner;
 import org.jmockring.ri.repository.TestConstructorAutowiredRepository;
 import org.jmockring.ri.repository.TestRepository;
 import org.jmockring.ri.repository.TestSetterAutowiredRepository;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.jmockring.spi.client.RestAssuredClient;
+import org.jmockring.webserver.jetty.JettyWebServer;
 
 /**
  * @author Pavel Lechev
  * @date 24/07/12
  */
 @RunWith(ExternalServerJUnitRunner.class)
-@PartOfSuite(ExternalServerSuiteIT.class)
+@PartOfSuite(JettyServerSuiteIT.class)
+@ContextDefaults(bootstrap = JettyWebServer.class, contextPath = "/context3", executionName = "ex3")
 public class WorkWithRemoteMocks {
 
-    @RemoteMock(executionName = "ex3", contextPath = "/context3")
+    @RemoteMock
     private TestSetterAutowiredRepository mockedRepo1;
 
-    @RemoteMock(executionName = "ex3", contextPath = "/context3")
+    @RemoteMock
     private TestRepository mockedRepo2;
 
-    @RemoteMock(executionName = "ex3", contextPath = "/context3")
+    @RemoteMock
     private TestConstructorAutowiredRepository mockedRepo3;
 
     @RequestClient
-    private ClientExecutor executor;
-
-    @ExecutionConfiguration(executionName = "ex3", contextPath = "/context3")
-    private ServerExecutionConfiguration configuration;
+    private RestAssuredClient client;
 
     @Test
-    @Ignore("Need to work on clients")
     public void shouldRetrieveAndVerifyRemoteMock() throws Exception {
 
         // RECORD REMOTE MOCKS BEHAVIOUR >>
@@ -75,24 +67,28 @@ public class WorkWithRemoteMocks {
         Mockito.when(mockedRepo2.getString()).thenReturn("Remote mock repository TestRepository");
         Mockito.when(mockedRepo3.getString()).thenReturn("Remote mock repository TestConstructorAutowiredRepository");
 
-        // MAKE THE REQUESTS >>
-        ClientResponse response1 = executor.createRequest(configuration.getRequestURL("/mocked-repos/" + TestSetterAutowiredRepository.class.getName()))
-                .accept(MediaType.APPLICATION_JSON)
-                .get();
-        Map<String, String> value1 = (Map) response1.getEntity(Map.class);
-        assertThat(value1.get("value"), is("Remote mock repository TestSetterAutowiredRepository"));
+        client.newRequest()
+            .request().log().all(true)
+            .response().log().all(true)
+            .expect()
+            .statusCode(200)
+            .content("value", is("Remote mock repository TestSetterAutowiredRepository"))
+            .when()
+            .get("/mocked-repos/{className}", TestSetterAutowiredRepository.class.getName().replace(".", "#"));
 
-        ClientResponse response2 = executor.createRequest(configuration.getRequestURL("/mocked-repos/" + TestRepository.class.getName()))
-                .accept(MediaType.APPLICATION_JSON)
-                .get();
-        Map<String, String> value2 = (Map) response2.getEntity(Map.class);
-        assertThat(value2.get("value"), is("Remote mock repository TestRepository"));
+        client.newRequest()
+            .expect()
+            .statusCode(200)
+            .body("value", is("Remote mock repository TestRepository"))
+            .when()
+            .get("/mocked-repos/{className}", TestRepository.class.getName().replace(".", "#"));
 
-        ClientResponse response3 = executor.createRequest(configuration.getRequestURL("/mocked-repos/" + TestConstructorAutowiredRepository.class.getName()))
-                .accept(MediaType.APPLICATION_JSON)
-                .get();
-        Map<String, String> value3 = (Map) response3.getEntity(Map.class);
-        assertThat(value3.get("value"), is("Remote mock repository TestConstructorAutowiredRepository"));
+        client.newRequest()
+            .expect()
+            .statusCode(200)
+            .body("value", is("Remote mock repository TestConstructorAutowiredRepository"))
+            .when()
+            .get("/mocked-repos/{className}", TestConstructorAutowiredRepository.class.getName().replace(".", "#"));
 
     }
 

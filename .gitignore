@@ -6,7 +6,6 @@
 /target
 /out
 
-*/target/*
 */target
 */out
 */bin
@@ -15,3 +14,5 @@
 .settings
 .project
 
+
+atlassian-ide-plugin.xml

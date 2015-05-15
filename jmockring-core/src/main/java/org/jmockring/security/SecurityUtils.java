@@ -32,10 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import sun.security.provider.PolicyFile;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 27/01/13
  */
 public class SecurityUtils {
@@ -74,7 +73,7 @@ public class SecurityUtils {
 
         final List<ProtectionDomain> baseStackDomains = getBaseStackDomains(classLoader);
 
-        Policy.setPolicy(new PolicyFile() {
+        Policy.setPolicy(new Policy() {
             @Override
             public PermissionCollection getPermissions(ProtectionDomain protectionDomain) {
                 PermissionCollection permissions = super.getPermissions(protectionDomain);
@@ -128,8 +127,7 @@ public class SecurityUtils {
     }
 
     /**
-     * @param classLoader
-     *
+     * @param originalClassLoader
      * @return
      */
     private static List<ProtectionDomain> getBaseStackDomains(ClassLoader originalClassLoader) {

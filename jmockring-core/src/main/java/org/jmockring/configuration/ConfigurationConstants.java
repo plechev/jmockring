@@ -28,7 +28,7 @@ package org.jmockring.configuration;
 public abstract class ConfigurationConstants {
 
     /** The name of system property pointing to external .properties files locations. */
-    public static final String EXTERNAL_CONFIG_SYSTEM_KEY = "config";
+    public static final String EXTERNAL_CONFIG_SYSTEM_KEY = "jmockring.config.location";
 
     public static final String EXECUTION_PROPERTIES_BOOTSTRAP = "jmockring.bootstrap";
 
