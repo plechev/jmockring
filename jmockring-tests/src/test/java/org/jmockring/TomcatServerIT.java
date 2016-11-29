@@ -24,13 +24,6 @@ package org.jmockring;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.jayway.restassured.response.Response;
-
 import org.jmockring.annotation.ContextDefaults;
 import org.jmockring.annotation.RequestClient;
 import org.jmockring.annotation.Server;
@@ -39,6 +32,13 @@ import org.jmockring.annotation.WebContext;
 import org.jmockring.junit.ExternalServerJUnitRunner;
 import org.jmockring.spi.client.RestAssuredClient;
 import org.jmockring.webserver.tomcat.TomcatWebServer;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.jayway.restassured.response.Response;
 
 /**
  * @author Pavel Lechev
@@ -77,6 +77,7 @@ import org.jmockring.webserver.tomcat.TomcatWebServer;
 }
 )
 @ContextDefaults(contextPath = "/context1", bootstrap = TomcatWebServer.class)
+@Ignore("Tomcat support is currently unstable - needs more work")
 public class TomcatServerIT {
 
     private static final Logger log = LoggerFactory.getLogger(TomcatServerIT.class);

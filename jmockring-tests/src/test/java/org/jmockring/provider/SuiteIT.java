@@ -1,4 +1,4 @@
-package org.jmockring.provider;/*
+/*
  * Copyright (c) 2013, Pavel Lechev
  *    All rights reserved.
  *
@@ -18,16 +18,17 @@ package org.jmockring.provider;/*
  *    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.springframework.web.servlet.DispatcherServlet;
+package org.jmockring.provider;
 
 import org.jmockring.annotation.DynamicContext;
 import org.jmockring.annotation.Server;
 import org.jmockring.annotation.Servers;
 import org.jmockring.annotation.Servlet;
 import org.jmockring.junit.ExternalServerJUnitSuiteRunner;
+import org.junit.Ignore;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * Reference implementation of the {@link org.jmockring.junit.ExternalServerJUnitSuiteRunner} usage to write configuration suites.
@@ -49,18 +50,19 @@ import org.jmockring.junit.ExternalServerJUnitSuiteRunner;
 @RunWith(ExternalServerJUnitSuiteRunner.class)
 // [Not ready] @Security("security/example.policy")
 @Servers(value = {
-    @Server(
-        dynamicContexts = @DynamicContext(
-            springContextLocations = "classpath:/spring/application-context.xml",
-            contextPath = "/context1",
-            servlets = {@Servlet(servletClass = DispatcherServlet.class)}
-        ),
-        testClass = SuiteIT.class
-    )
+        @Server(
+                dynamicContexts = @DynamicContext(
+                        springContextLocations = "classpath:/spring/application-context.xml",
+                        contextPath = "/context1",
+                        servlets = {@Servlet(servletClass = DispatcherServlet.class)}
+                ),
+                testClass = SuiteIT.class
+        )
 })
 @Suite.SuiteClasses({
-    CheckServiceProviders.class
+        CheckServiceProviders.class
 })
+@Ignore
 public class SuiteIT {
 
 }
