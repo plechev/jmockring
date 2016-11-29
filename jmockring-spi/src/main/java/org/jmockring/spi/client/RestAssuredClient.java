@@ -21,8 +21,6 @@
 
 package org.jmockring.spi.client;
 
-import org.jmockring.configuration.BaseContextConfiguration;
-import org.jmockring.configuration.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,8 +29,15 @@ import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.parsing.Parser;
 import com.jayway.restassured.specification.RequestSpecification;
 
+import org.jmockring.annotation.RequestClient;
+import org.jmockring.configuration.BaseContextConfiguration;
+import org.jmockring.configuration.ServerConfiguration;
+
 /**
- * @version 0.0.1@author Pavel Lechev <pavel@jmockring.org>
+ * A wrapper around {@link RestAssured} REST testing client which is automatically pre-configured
+ * with the correct host/port and context path and can be injected in the test class with {@link RequestClient}.
+ *
+ * @author Pavel Lechev
  * @date 17/02/13
  */
 public class RestAssuredClient {

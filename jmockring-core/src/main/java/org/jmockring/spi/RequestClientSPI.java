@@ -21,7 +21,6 @@
 
 package org.jmockring.spi;
 
-import org.jmockring.annotation.BootstrapConfig;
 import org.jmockring.configuration.BaseContextConfiguration;
 import org.jmockring.configuration.ServerConfiguration;
 
@@ -30,7 +29,7 @@ import org.jmockring.configuration.ServerConfiguration;
  * <p/>
  * It supports Sun's modular architecture.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 12/02/13
  */

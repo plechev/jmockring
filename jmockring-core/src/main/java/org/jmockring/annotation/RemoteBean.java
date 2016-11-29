@@ -40,7 +40,7 @@ import org.jmockring.webserver.WebServer;
  * Since some of these beans may be proxied by Spring, the declaring type of the injected field should be an interface,
  * not concrete implementation.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 02/01/13
  * @see org.jmockring.junit.PoshTestPostProcessor
  */

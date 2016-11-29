@@ -34,7 +34,7 @@ import org.jmockring.webserver.WebServer;
  * <p/>
  * <b>Usage:</b> Simply annotate the field in the test class. The field type must be supported (see SPI providers).
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 04/01/13
  * @see org.jmockring.junit.PoshTestPostProcessor
  */

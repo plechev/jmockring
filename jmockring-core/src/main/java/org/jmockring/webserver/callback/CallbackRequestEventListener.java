@@ -27,14 +27,15 @@ import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jmockring.configuration.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.jmockring.configuration.ServerConfiguration;
 
 /**
  * Provide thread synchronisation for HTTP requests handled by the bootstrapped server.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 31/01/13
  * @see org.jmockring.configuration.BaseContextConfiguration#getRequestEventListener()
  * @see org.jmockring.annotation.RemoteRequestListener

@@ -22,7 +22,7 @@
 package org.jmockring.provider.mock;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 01/03/13
  */

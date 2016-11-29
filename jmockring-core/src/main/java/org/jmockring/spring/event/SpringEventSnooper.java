@@ -50,7 +50,7 @@ import org.springframework.context.ApplicationListener;
  *
  * </pre>
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 05/02/13
  */
 public class SpringEventSnooper<E extends ApplicationEvent> implements ApplicationListener<E> {

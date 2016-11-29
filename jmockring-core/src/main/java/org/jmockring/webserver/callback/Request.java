@@ -24,13 +24,14 @@ package org.jmockring.webserver.callback;
 import java.util.Map;
 
 /**
- * Handoff of {@link javax.servlet.http.HttpServletRequest} from the executing server to the test class.
+ * Hand-off of {@link javax.servlet.http.HttpServletRequest} from the executing server to the test class.
  * <p/>
  * It is safer to create copy of the essential request data and pass
  * it to another thread than to pass the request object itself
- * - think J2EE request are meant to be contained in a single thread and tossing them around isn't desirable.
+ * <p/>
+ * Servlet API requests are thread-local instances and tossing them around would be dangerous.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 31/01/13
  */
 public final class Request {
@@ -60,8 +61,8 @@ public final class Request {
         return parameters;
     }
 
-    public static enum Method {
-        GET, POST, PUT, HEAD, DELETE, OPTIONS;
+    public enum Method {
+        GET, POST, PUT, HEAD, DELETE, OPTIONS, TRACE
     }
 
     @Override

@@ -21,13 +21,14 @@
 
 package org.jmockring;
 
-import org.jmockring.annotation.PartOfSuite;
-import org.jmockring.junit.ExternalServerJUnitRunner;
-import org.jmockring.junit.ExternalServerJUnitSuiteRunner;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.jmockring.annotation.PartOfSuite;
+import org.jmockring.junit.ExternalServerJUnitRunner;
+import org.jmockring.junit.ExternalServerJUnitSuiteRunner;
 
 /**
  * This is not a test per-se, but sanity check that annotating a class with {@link Ignore}
@@ -44,7 +45,7 @@ import org.junit.runner.RunWith;
  * @date 20/07/12
  */
 @RunWith(ExternalServerJUnitRunner.class)
-@PartOfSuite(ExternalServerSuiteIT.class)
+@PartOfSuite(JettyServerSuiteIT.class)
 @Ignore
 public class IgnoredClass {
 

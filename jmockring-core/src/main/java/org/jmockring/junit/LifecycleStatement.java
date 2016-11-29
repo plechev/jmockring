@@ -28,7 +28,7 @@ import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.Statement;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 15/01/13
  */
 public class LifecycleStatement extends Statement {
@@ -87,7 +87,7 @@ public class LifecycleStatement extends Statement {
     }
 
 
-    static enum Phase {
+    enum Phase {
         BEFORE(true) {
             @Override
             void execute(List<TestLifecycleListener> listeners, Object testInstance) {

@@ -35,7 +35,7 @@ import org.jmockring.spi.PreStartupHook;
  * <p/>
  * All settings here must have default values.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 30/01/13
  */
 @Target(ElementType.TYPE)
@@ -92,7 +92,7 @@ public @interface BootstrapConfig {
      * Hold the default configuration, if the test class is not annotated with this explicitly.
      */
     @BootstrapConfig
-    public static class DEFAULT {
+    class DEFAULT {
 
         public static BootstrapConfig getConfig() {
             return (BootstrapConfig) DEFAULT.class.getAnnotations()[0];

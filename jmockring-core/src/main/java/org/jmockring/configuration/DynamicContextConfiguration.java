@@ -21,6 +21,8 @@
 
 package org.jmockring.configuration;
 
+import org.apache.commons.lang3.StringUtils;
+
 import org.jmockring.annotation.DynamicContext;
 import org.jmockring.annotation.Server;
 
@@ -30,8 +32,7 @@ import org.jmockring.annotation.Server;
  * <p/>
  * The servlet context is created programatically and Spring contexts bootstrapped from a list of XML configuration files.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
- * @version 0.0.1
+ * @author Pavel Lechev
  * @date 31/12/12
  */
 public class DynamicContextConfiguration extends BaseContextConfiguration<DynamicContext> {
@@ -48,27 +49,13 @@ public class DynamicContextConfiguration extends BaseContextConfiguration<Dynami
      * including the <code>securitySpringContextLocations</code> if <code><b>secured</b></code> is true.
      *
      * @return
+     * @should aggregate configured context locations as string
+     * @should aggregate configured context and security context locations as string
      */
     public String getAllContextLocationsAsString() {
-        StringBuilder all = new StringBuilder();
-        int locNum = dynamicContext.springContextLocations().length;
-        int c = 0;
-        for (String contextLocation : dynamicContext.springContextLocations()) {
-            all.append(contextLocation);
-            if (c++ < locNum) {
-                all.append(",");
-            }
-        }
-        // append security dynamicContexts only if enabled explicitly
-        locNum = dynamicContext.securityContextLocations().length;
-        if (locNum > 0) {
-            c = 0;
-            for (String contextLocation : dynamicContext.securityContextLocations()) {
-                all.append(contextLocation);
-                if (c++ < locNum) {
-                    all.append(",");
-                }
-            }
+        StringBuilder all = new StringBuilder(StringUtils.join(dynamicContext.springContextLocations(), ","));
+        if (dynamicContext.securityContextLocations().length > 0) {
+            all.append(StringUtils.join(dynamicContext.securityContextLocations(), ","));
         }
         return all.toString();
     }

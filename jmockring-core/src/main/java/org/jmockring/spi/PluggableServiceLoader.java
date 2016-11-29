@@ -23,15 +23,16 @@ package org.jmockring.spi;
 
 import java.util.ServiceLoader;
 
-import org.jmockring.configuration.BaseContextConfiguration;
-import org.jmockring.configuration.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.jmockring.configuration.BaseContextConfiguration;
+import org.jmockring.configuration.ServerConfiguration;
 
 /**
  * Utility class to load SPI providers.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 12/02/13
  */

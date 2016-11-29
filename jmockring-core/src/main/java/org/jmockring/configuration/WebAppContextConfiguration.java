@@ -29,7 +29,7 @@ import org.jmockring.annotation.WebContext;
  * <p/>
  * Partial Spring contexts with auto-mocking can be supported only if the `web.xml` is customised for testing only.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 01/01/13
  */

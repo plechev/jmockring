@@ -22,10 +22,8 @@
 package org.jmockring.annotation;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
- * @version 0.0.1
- * @date 01/01/13
- * @see org.eclipse.jetty.webapp.WebAppContext#WebAppContext(String, String)
+ * @author Pavel Lechev
+ * @since 01/01/13
  */
 public @interface WebContext {
 

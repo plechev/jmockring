@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * This allows test classes to be run outside the suite while still benefiting from the
  * suite's server execution configurations.
  *
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @date 04/01/13
  */
 @Target(ElementType.TYPE)

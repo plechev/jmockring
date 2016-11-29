@@ -24,7 +24,7 @@ package org.jmockring.spi.provider.mockring;
 import org.jmockring.spi.ExecutionHandler;
 
 /**
- * @author Pavel Lechev <pavel@jmockring.org>
+ * @author Pavel Lechev
  * @version 0.0.1
  * @date 28/02/13
  */
