@@ -19,3 +19,70 @@ The main features of JMockring are:
 [RestAssured]:https://github.com/jayway/rest-assured
 [Mockito]:https://github.com/mockito/mockito
 [PowerMockito]:https://code.google.com/p/powermock 
+
+## Usage 
+
+#### Setup for a individual test class
+    
+    @RunWith(ExternalServerJUnitRunner.class) // <- use ExternalServerJUnitRunner for bootstrapping application in an isolated test class
+    @BootstrapConfig(numberOfAttempts = 10)   // <- some server startup options 
+    @Servers(value = {                        // <- declare one or more servers with the application context each one will run   
+        @Server(
+            dynamicContexts = @DynamicContext(  // <- @DynamicContext allows to compose the Web application via annotaions
+                                                //          This tries to mimic what the web descriptor will do in real life
+                springContextLocations = "classpath:/spring/application-context.xml",
+                contextPath = "/context1",
+                servlets = {@Servlet(servletClass = DispatcherServlet.class, params = {@Param(name = "contextConfigLocation", value = "classpath:/spring/web-mvc-context.xml")})},
+                excludedConfigLocations = "repository-context.xml"  // <- filename patterns to exclude when building the Spring context
+                                                                    //    Such exclusions allow partial Spring context to be deployed with any "missing" beans being auto-mocked
+                                                                    //    Useful, if the test does not care about particular part of the application and would benefit from stubbing it instead.                                                                                          
+            ),
+            bootstrap = JettyWebServer.class,                       // <- deploy on embedded Jetty server (Tomcat support is WIP)  
+            name = "ex1",                                           // <- identify this particular server - used when injecting various objects into the test   
+            testClass = JettyServerSuiteIT.class   
+        )
+        ,
+        @Server(                             // <- Multiple servers can be started with same or different context configuration 
+                                             //    The PortChecker will ensure TCP ports for the running HTTP listener are automatically allocated based on availability  
+            dynamicContexts = @DynamicContext(
+                springContextLocations = "classpath:/spring/application-context.xml",
+                contextPath = "/context2",
+                servlets = {@Servlet(servletClass = DispatcherServlet.class, params = {@Param(name = "contextConfigLocation", value = "classpath:/spring/web-mvc-context.xml")})}
+            ),
+            propertiesLocation = "/mock/base-webserver-ri.properties",
+            bootstrap = JettyWebServer.class,
+            name = "ex2",
+            testClass = JettyServerSuiteIT.class)
+    })
+    public class MyRESTIntegrationIT {
+        
+        @RequestClient(executionName = "ex1", contextPath = "/context1")  // <- inject the RestAssured wrapper for server configuration "ex1"  
+        private RestAssuredClient client1;
+        
+        @RequestClient(executionName = "ex2", contextPath = "/context2")  // <- inject the RestAssured wrapper for server configuration "ex2"  
+        private RestAssuredClient client2;
+        
+        @RemoteMock(executionName = "ex1", contextPath = "/context1")     // <- inject the auto-mocked repository from sserver "ex1"
+        private MyRepository myRepositoryMock;
+        
+        @Test
+        public void shouldExecuteRESTCallAndVerifyResponse() throws Exception {
+    
+            // RECORD REMOTE MOCKS BEHAVIOUR >>
+            Mockito.when(myRepositoryMock.getValue(eq("queryValue"))).thenReturn("Expected Value");
+    
+            // execute and verify REST 
+            client1.newRequest()  // <- calling `newRequest()` on the wrapper returns the pre-configured (ready to use) RestAssured specification
+                                  //    from this point on, the control is passed to RestAssured's DSL builder.   
+                .request().log().all(true)
+                .response().log().all(true)
+                .expect()
+                .statusCode(200)
+                .content("value", is("Expected Value"))
+                .when()
+                .get("/app-path-excluding-context-path/{query}", "queryValue");
+
+        }
+        
+        ... 
+    }
