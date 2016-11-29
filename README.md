@@ -86,3 +86,19 @@ The main features of JMockring are:
         
         ... 
     }
+
+
+## Limitations
+ 
+ * Currently the support for deploying the application from `web.xml` descriptor does not work
+ * The application bootstrap requires using either `ExternalServerJUnitRunner` or `ExternalServerJUnitSuiteRunner` thus preventing usage of any other JNit runners. 
+ * Spring auto-mocking works best for well layered physical designs, i.e. separate XML configuration files for rest, service, repository, etc ... layers
+ * No current support for applications using static assets, JSPs or similar technologies. The best use case for __jmockring__ is a _pure_ REST application.   
+         
+## TODO
+    
+ * Add support for `web.xml`
+ * Use javassist for bytecode rewrite to auto-weave Spring context loaders (required for full `web.xml` support)
+ * Add support for static assets
+ * Move bootstrapping to use JUnit rules instead of runners, thus freeing the test class to use a runner of choice
+    
