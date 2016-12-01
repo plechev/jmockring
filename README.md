@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/plechev/jmockring.svg?branch=develop)](https://travis-ci.org/plechev/jmockring)
+
 # jmockring
 
 Jmockring is an integration testing utility for REST applications written in Java and using the Spring stack.
